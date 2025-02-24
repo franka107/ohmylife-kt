@@ -1,0 +1,7 @@
+getTaskList:
+SELECT *
+FROM task;
+
+insertTask:
+INSERT INTO task (id, title, description, started_at, paused_at, worked_time, finished_at, priority, theme, price, experience, created_at, updated_at)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);

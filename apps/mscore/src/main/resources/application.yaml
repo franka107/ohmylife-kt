@@ -1,0 +1,7 @@
+ktor:
+  application:
+    modules:
+      - dev.pango.ohmylife.apps.mscore.ApplicationKt.module
+  deployment:
+    port: 8080
+  development: true

@@ -1,0 +1,17 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="Mscore App" type="KtorApplicationConfigurationType" factoryName="Ktor">
+        <module name="copilot.apps.monolith.main" />
+        <option name="alternativeJrePath" value="17" />
+        <option name="alternativeJrePathEnabled" value="false" />
+        <option name="includeProvidedScope" value="true" />
+        <option name="mainClass" value="com.pango.ohmylife.apps.mscore.ApplicationKt" />
+        <option name="passParentEnvs" value="true" />
+        <option name="programParameters" value="--environment=local" />
+        <option name="shortenCommandLine" value="NONE" />
+        <option name="vmParameters" value="" />
+        <option name="workingDirectory" value="./apps/mscore" />
+        <method v="2">
+            <option name="Make" enabled="true" />
+        </method>
+    </configuration>
+</component>
