@@ -2,7 +2,17 @@
 FROM gradle:8.5-jdk17 AS build
 WORKDIR /app
 
-# Copia los archivos del proyecto
+# Copia solo los archivos de configuración primero (para aprovechar la cache de dependencias)
+COPY gradle gradle
+COPY gradlew .
+COPY build.gradle.kts .
+COPY settings.gradle.kts .
+COPY apps/mscore/build.gradle.kts apps/mscore/
+
+# Descarga dependencias sin compilar el código
+RUN ./gradlew :apps:mscore:dependencies --no-daemon
+
+# Ahora copia el código fuente (cambia solo cuando hay modificaciones)
 COPY . .
 
 # Compila y empaqueta la aplicación
@@ -12,10 +22,10 @@ RUN ./gradlew :apps:mscore:installDist --no-daemon
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 
-# Copia el resultado de la compilación desde la etapa anterior
+# Copia solo el binario compilado desde la etapa anterior
 COPY --from=build /app/apps/mscore/build/install/mscore /app
 
-# Expone el puerto en el que corre Ktor (ajústalo si es diferente)
+# Expone el puerto en el que corre Ktor
 EXPOSE 8080
 
 # Comando de ejecución
