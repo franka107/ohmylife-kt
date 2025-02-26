@@ -22,4 +22,42 @@ class TemporalTaskRepository(private val client: HttpClient) {
             emptyList()
         }
     }
+
+    suspend fun createTask(task: TaskDto): Boolean {
+        return try {
+            val response: HttpResponse = client.post("https://core.ohmylife.development.pango.dev/tasks") {
+                contentType(ContentType.Application.Json)
+                setBody(task)
+            }
+
+            if (response.status == HttpStatusCode.OK) {
+                println("Task created successfully")
+                true
+            } else {
+                println("Error on response: ${response.status}")
+                false
+            }
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            false
+        }
+    }
+
+
+    suspend fun createTask() {
+        val response: HttpResponse = client.post("https://core.ohmylife.development.pango.dev/tasks")
+    }
+
+    suspend fun playTask(taskId: String) {
+        val response: HttpResponse = client.post("https://core.ohmylife.development.pango.dev/tasks/${taskId}/play")
+    }
+
+    suspend fun pauseTask(taskId: String) {
+        val response: HttpResponse = client.post("https://core.ohmylife.development.pango.dev/tasks/${taskId}/pause")
+    }
+
+    suspend fun stopTask(taskId: String) {
+        val response: HttpResponse = client.post("https://core.ohmylife.development.pango.dev/tasks/${taskId}/stop")
+    }
+
 }

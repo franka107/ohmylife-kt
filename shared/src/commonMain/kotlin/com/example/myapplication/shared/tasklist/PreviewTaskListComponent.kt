@@ -9,4 +9,16 @@ object PreviewTaskListComponent : TaskListComponent {
     override fun onAddButtonClicked() {}
 
     override fun onBackClicked() {}
+    override fun onPlayTaskButtonClicked(taskId: String) {
+    }
+
+    override fun onPauseTaskButtonClicked(taskId: String) {
+    }
+
+    override fun onStopTaskButtonClicked(taskId: String) {
+    }
+
+    override fun onRefreshButtonClicked() {
+
+    }
 }

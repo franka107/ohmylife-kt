@@ -73,4 +73,28 @@ class DefaultTaskListComponent(
     override fun onBackClicked() {
         onFinished()
     }
+
+    override fun onRefreshButtonClicked() {
+        scope.launch {
+            loadTasks()
+        }
+    }
+
+    override fun onPlayTaskButtonClicked(taskId: String) {
+        scope.launch {
+            temporalTaskRepository.playTask(taskId)
+        }
+    }
+
+    override fun onPauseTaskButtonClicked(taskId: String) {
+        scope.launch {
+            temporalTaskRepository.pauseTask(taskId)
+        }
+    }
+
+    override fun onStopTaskButtonClicked(taskId: String) {
+        scope.launch {
+            temporalTaskRepository.stopTask(taskId)
+        }
+    }
 }

@@ -29,12 +29,17 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import dev.pango.ohmylife.features.sharedkernel.domain.entity.TaskCategoryType
 import dev.pango.ohmylife.features.sharedkernel.domain.entity.TaskPriority
+import kotlinx.coroutines.delay
+import kotlinx.datetime.Clock
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
@@ -65,9 +70,17 @@ internal fun TaskListContent(
 
             paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
+            IconButton(onClick = {component.onRefreshButtonClicked()}) {
+                Icon(imageVector = Icons.Default.Refresh, contentDescription = "Refresh")
+            }
+            LazyColumn(modifier = Modifier.fillMaxSize().padding(8.dp)) {
                 items(model.taskList) { task ->
-                    TaskItem(task, onPlay = {}, onPause = {}, onStop = {})
+                    TaskItem(task, onPlay = { component.onPlayTaskButtonClicked(it)}, onPause = {
+                        component.onPauseTaskButtonClicked(it)
+                    }, onStop = {
+
+                        component.onStopTaskButtonClicked(it)
+                    })
                 }
             }
         }
@@ -78,7 +91,22 @@ internal fun TaskListContent(
 
 
 @Composable
-fun TaskItem(task: TaskDomain, onPlay: () -> Unit, onPause: () -> Unit, onStop: () -> Unit) {
+fun TaskItem(task: TaskDomain, onPlay: (taskId: String) -> Unit, onPause: (taskId: String) -> Unit, onStop: (taskId:String) -> Unit) {
+    val elapsedTime = remember { mutableStateOf(task.elapsedTimeInMillis) }
+    val startedAt = task.startedAt?.toEpochMilliseconds()
+    val isRunning = startedAt != null && task.finishedAt == null
+
+    LaunchedEffect(isRunning) {
+        if (isRunning) {
+            while (true) {
+                val now = Clock.System.now().toEpochMilliseconds()
+                elapsedTime.value = task.elapsedTimeInMillis + (now - startedAt!!)
+                delay(1000L)
+            }
+        }
+    }
+
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -93,6 +121,14 @@ fun TaskItem(task: TaskDomain, onPlay: () -> Unit, onPause: () -> Unit, onStop: 
             task.description?.let {
                 Text(text = it, fontSize = 14.sp, color = Color.Gray)
             }
+
+            Spacer(modifier = Modifier.height(8.dp))
+            // Tiempo transcurrido
+            Text(
+                text = "Tiempo: ${formatElapsedTime(elapsedTime.value)}",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Bold
+            )
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -153,13 +189,13 @@ fun TaskItem(task: TaskDomain, onPlay: () -> Unit, onPause: () -> Unit, onStop: 
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                IconButton(onClick = onPlay) {
+                IconButton(onClick = {onPlay(task.id)}) {
                     Icon(imageVector = Icons.Default.PlayArrow, contentDescription = "Play")
                 }
-                IconButton(onClick = onPause) {
+                IconButton(onClick = {onPause(task.id)}) {
                     Icon(imageVector = Icons.Default.Clear, contentDescription = "Pause")
                 }
-                IconButton(onClick = onStop) {
+                IconButton(onClick = {onStop(task.id)}) {
                     Icon(imageVector = Icons.Default.Delete, contentDescription = "Stop")
                 }
             }

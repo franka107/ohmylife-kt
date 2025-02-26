@@ -9,6 +9,10 @@ interface TaskListComponent {
 
     fun onAddButtonClicked()
     fun onBackClicked()
+     fun onPlayTaskButtonClicked(taskId: String)
+     fun onPauseTaskButtonClicked(taskId: String)
+     fun onStopTaskButtonClicked(taskId: String)
+     fun onRefreshButtonClicked()
 
     data class Model(
         val taskList: List<TaskDomain> = emptyList()
