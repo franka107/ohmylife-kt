@@ -17,7 +17,10 @@ import com.example.myapplication.shared.welcome.DefaultWelcomeComponent
 import com.example.myapplication.shared.welcome.WelcomeComponent
 import dev.pango.ohmylife.features.sharedkernel.application.service.TemporalTaskRepository
 import io.ktor.client.HttpClient
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 
 class DefaultRootComponent(
     componentContext: ComponentContext,
@@ -57,7 +60,13 @@ class DefaultRootComponent(
         DefaultTaskListComponent(
             componentContext = componentContext,
             onFinished = navigation::pop,
-            temporalTaskRepository = TemporalTaskRepository(HttpClient()),
+            temporalTaskRepository = TemporalTaskRepository(HttpClient {
+                install(ContentNegotiation) {
+                    json(Json {
+                        ignoreUnknownKeys = true
+                    })
+                }
+            }),
         )
 
     override fun onBackClicked(toIndex: Int) {

@@ -13,6 +13,7 @@ import dev.pango.ohmylife.features.sharedkernel.domain.entity.TaskPriority
 import dev.pango.ohmylife.features.sharedkernel.domain.failure.AppFailure
 import dev.pango.ohmylife.features.sharedkernel.domain.repository.TaskRepository
 import kotlinx.serialization.json.Json
+import kotlin.math.pow
 
 class TaskService (
     private val taskRepository: TaskRepository,
@@ -23,14 +24,36 @@ class TaskService (
         val task: TaskDomain = taskDto.toDomain()
         val taskDifficulty = processTaskDifficulty(task.title, task.description, task.priority).bind()
         val taskCategory = processTaskCategory(task.title, task.description).bind()
+        val taskExperiencePoints = calculateExperiencePoints(taskDifficulty.difficultyPoints)
+        val taskRewardMoney = calculateRewardMoney(taskDifficulty.difficultyPoints)
         val taskUpdated = task.copy(
             difficultyPoints = taskDifficulty.difficultyPoints,
             difficultyReason = taskDifficulty.difficultyReason,
+            experiencePoints = taskExperiencePoints,
+            rewardMoney = taskRewardMoney,
             categoryType = TaskCategoryType.valueOf(taskCategory.categoryType),
             categoryReason = taskCategory.categoryReason
         )
         val result = taskRepository.createTask(taskUpdated).bind()
         result
+    }
+
+    suspend fun playTask(taskId: String): Either<AppFailure, Unit> = either {
+        val task = taskRepository.getTask(taskId).bind()
+        task.start()
+        taskRepository.updateTask(task).bind()
+    }
+
+    suspend fun pauseTask(taskId: String): Either<AppFailure, Unit> = either {
+        val task = taskRepository.getTask(taskId).bind()
+        task.pause()
+        taskRepository.updateTask(task).bind()
+    }
+
+    suspend fun stopTask(taskId: String): Either<AppFailure, Unit> = either {
+        val task = taskRepository.getTask(taskId).bind()
+        task.stop()
+        taskRepository.updateTask(task).bind()
     }
 
     private suspend  fun processTaskDifficulty(
@@ -121,5 +144,15 @@ class TaskService (
         taskCategoryDTO
     }.mapLeft {
         AppFailure.UnknownFailure(it)
+    }
+
+    private fun calculateExperiencePoints(difficulty: Int): Int {
+        require(difficulty in 1..100) { "La dificultad debe estar entre 1 y 100" }
+        return (difficulty * difficulty / 10.0 + 5).toInt()
+    }
+
+    private fun calculateRewardMoney(difficulty: Int): Int {
+        require(difficulty in 1..100) { "La dificultad debe estar entre 1 y 100" }
+        return (difficulty.toDouble().pow(3) / 100 + 10).toInt()
     }
 }

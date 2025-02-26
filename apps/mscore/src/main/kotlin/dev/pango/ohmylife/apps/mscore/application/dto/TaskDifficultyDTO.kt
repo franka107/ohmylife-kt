@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TaskDifficultyDTO(
-    val difficultyPoints: Int?,
-    val difficultyReason: String?,
+    val difficultyPoints: Int,
+    val difficultyReason: String,
 )

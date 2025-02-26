@@ -16,7 +16,6 @@ fun Application.taskRoutes() {
     val taskRepository by inject<TaskRepository>()
 
     routing {
-        // Listar tareas
         get("/tasks") {
             val result = taskRepository.getTaskList()
             result.fold(
@@ -25,7 +24,6 @@ fun Application.taskRoutes() {
             )
         }
 
-        // Crear tarea
         post("/tasks") {
             val request = call.receive<TaskDto>()
             val result = taskService.createTask(request)
@@ -34,5 +32,37 @@ fun Application.taskRoutes() {
                 ifRight = { call.respond(mapOf("message" to "Task created successfully")) }
             )
         }
+
+        post("/tasks/{id}/play") {
+            val id = call.parameters["id"] ?: return@post call.respond(mapOf("error" to "Missing task ID"))
+            val request = call.receive<TaskDto>()
+            val result = taskService.playTask(id)
+            result.fold(
+                ifLeft = { call.respond(mapOf("error" to it.message, "cause" to it.cause?.message)) },
+                ifRight = { call.respond(mapOf("message" to "Task played successfully")) }
+            )
+        }
+
+        post("/tasks/{id}/pause") {
+            val id = call.parameters["id"] ?: return@post call.respond(mapOf("error" to "Missing task ID"))
+            val request = call.receive<TaskDto>()
+            val result = taskService.pauseTask(id)
+            result.fold(
+                ifLeft = { call.respond(mapOf("error" to it.message, "cause" to it.cause?.message)) },
+                ifRight = { call.respond(mapOf("message" to "Task paused successfully")) }
+            )
+        }
+
+        post("/tasks/{id}/stop") {
+            val id = call.parameters["id"] ?: return@post call.respond(mapOf("error" to "Missing task ID"))
+            val request = call.receive<TaskDto>()
+            val result = taskService.stopTask(id)
+            result.fold(
+                ifLeft = { call.respond(mapOf("error" to it.message, "cause" to it.cause?.message)) },
+                ifRight = { call.respond(mapOf("message" to "Task stoped successfully")) }
+            )
+        }
+
+
     }
 }

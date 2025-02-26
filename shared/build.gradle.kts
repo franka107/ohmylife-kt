@@ -46,6 +46,8 @@ kotlin {
                 api(libs.essenty.lifecycle)
                 api(libs.essenty.lifecycleCoroutines)
                 api(libs.ktor.client.core)
+                api(libs.ktor.client.contentnegotiation)
+                api(libs.ktor.serializationkotlinxjson)
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.arrow.core)
                 implementation(libs.arrow.fxcoroutines)

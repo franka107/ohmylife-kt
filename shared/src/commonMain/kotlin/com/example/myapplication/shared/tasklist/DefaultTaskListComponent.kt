@@ -7,11 +7,18 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.update
 import dev.pango.ohmylife.features.sharedkernel.application.service.TemporalTaskRepository
 import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
+import dev.pango.ohmylife.features.sharedkernel.domain.entity.TaskCategoryType
+import dev.pango.ohmylife.features.sharedkernel.domain.entity.TaskDomain
+import dev.pango.ohmylife.features.sharedkernel.domain.entity.TaskPriority
 import dev.pango.ohmylife.features.sharedkernel.mapper.toDomain
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import kotlin.coroutines.CoroutineContext
 
 
@@ -41,6 +48,24 @@ class DefaultTaskListComponent(
    private fun loadTasks() {
        scope.launch {
            val tasks = temporalTaskRepository.getTasks().map { it.toDomain() }
+           val mockTasks = listOf(TaskDomain(
+               id = "1",
+               title = "Probando",
+               description = "a description",
+               startedAt = Clock.System.now() ,
+               elapsedTimeInMillis = 0,
+               finishedAt = null,
+               pausedAt = null,
+               priority = TaskPriority.LOW,
+               categoryType = TaskCategoryType.WORK,
+               categoryReason = "Probbnao",
+               rewardMoney = 10,
+               experiencePoints = 10,
+               difficultyPoints = 20,
+               difficultyReason = "test",
+               createdAt = Clock.System.now(),
+               updatedAt = Clock.System.now() ,
+           ))
            state.update { it.copy(taskList = tasks) }
        }
    }

@@ -1,5 +1,6 @@
 package dev.pango.ohmylife.features.sharedkernel.application.dto
 
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
@@ -8,10 +9,10 @@ data class TaskDto(
     val id: String,
     val title: String,
     val description: String?,
-    val startedAt: LocalDateTime?,
+    val startedAt: Instant?,
     val elapsedTimeInMillis: Long,
-    val finishedAt: LocalDateTime?,
-    val pausedAt: LocalDateTime?,
+    val finishedAt: Instant?,
+    val pausedAt: Instant?,
     val priority: String,
     val categoryType: String?,
     val categoryReason: String?,
@@ -19,6 +20,6 @@ data class TaskDto(
     val experiencePoints: Int?,
     val difficultyPoints: Int?,
     val difficultyReason: String?,
-    val createdAt: LocalDateTime,
-    val updatedAt: LocalDateTime
+    val createdAt: Instant,
+    val updatedAt: Instant
 )

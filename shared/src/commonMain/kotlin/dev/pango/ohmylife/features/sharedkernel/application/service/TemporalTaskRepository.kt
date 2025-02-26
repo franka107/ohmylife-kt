@@ -9,14 +9,16 @@ import io.ktor.http.*
 
 class TemporalTaskRepository(private val client: HttpClient) {
     suspend fun getTasks(): List<TaskDto> {
+        val response: HttpResponse = client.get("https://core.ohmylife.development.pango.dev/tasks")
         return try {
-            val response: HttpResponse = client.get("http://localhost:8080/tasks")
             if (response.status == HttpStatusCode.OK) {
-                response.body()
+                response.body<List<TaskDto>>()
             } else {
+                println("Error on response: ${response.status}")
                 emptyList()
             }
         } catch (e: Exception) {
+            println("Error: ${e.message}")
             emptyList()
         }
     }

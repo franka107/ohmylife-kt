@@ -24,6 +24,25 @@ INSERT INTO task (
     ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
 );
 
+updateTask:
+UPDATE task
+SET
+    title = ?,
+    description = ?,
+    started_at = ?,
+    elapsed_time_in_millis = ?,
+    finished_at = ?,
+    paused_at = ?,
+    priority = ?,
+    category_type = ?,
+    category_reason = ?,
+    reward_money = ?,
+    experience_points = ?,
+    difficulty_points = ?,
+    difficulty_reason = ?,
+    updated_at = ?
+WHERE id = ?;
+
 getTask:
 SELECT *
 FROM task
