@@ -146,13 +146,14 @@ class TaskService (
         AppFailure.UnknownFailure(it)
     }
 
+
     private fun calculateExperiencePoints(difficulty: Int): Int {
         require(difficulty in 1..100) { "La dificultad debe estar entre 1 y 100" }
-        return (difficulty * difficulty / 10.0 + 5).toInt()
+        return (difficulty.toDouble().pow(1.5) / 3 + 3).toInt()
     }
 
     private fun calculateRewardMoney(difficulty: Int): Int {
         require(difficulty in 1..100) { "La dificultad debe estar entre 1 y 100" }
-        return (difficulty.toDouble().pow(3) / 100 + 10).toInt()
+        return (difficulty.toDouble().pow(1.8) / 10 + 5).toInt()
     }
 }
