@@ -3,5 +3,29 @@ SELECT *
 FROM task;
 
 insertTask:
-INSERT INTO task (id, title, description, started_at, paused_at, worked_time, finished_at, priority, theme, price, experience, created_at, updated_at)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+INSERT INTO task (
+    id,
+    title,
+    description,
+    started_at,
+    elapsed_time_in_millis,
+    finished_at,
+    paused_at,
+    priority,
+    category_type,
+    category_reason,
+    reward_money,
+    experience_points,
+    difficulty_points,
+    difficulty_reason,
+    created_at,
+    updated_at
+) VALUES (
+    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+);
+
+getTask:
+SELECT *
+FROM task
+WHERE id = ?;
+

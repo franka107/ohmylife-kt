@@ -1,4 +1,4 @@
-package dev.pango.ohmylife.apps.mscore.infraestructure.di
+package dev.pango.ohmylife.apps.mscore.di
 
 
 import dev.pango.ohmylife.apps.mscore.infraestructure.database.DatabaseFactory

@@ -51,6 +51,7 @@ arrow-fxcoroutines = { module = "io.arrow-kt:arrow-fx-coroutines", version.ref =
 decompose-decompose = { group = "com.arkivanov.decompose", name = "decompose", version.ref = "decompose" }
 decompose-extensionsComposeJetbrains = { group = "com.arkivanov.decompose", name = "extensions-compose", version.ref = "decompose" }
 essenty-lifecycle = { group = "com.arkivanov.essenty", name = "lifecycle", version.ref = "essenty" }
+essenty-lifecycleCoroutines = { group = "com.arkivanov.essenty", name = "lifecycle-coroutines", version.ref = "essenty" }
 
 #Ktor backend libraries
 ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
@@ -67,6 +68,7 @@ ktor-serializationkotlinxjson = { module = "io.ktor:ktor-serialization-kotlinx-j
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 
 # SQLDelight
 sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }

@@ -13,6 +13,7 @@ import com.arkivanov.decompose.extensions.compose.stack.animation.*
 import com.example.myapplication.main.MainContent
 import com.example.myapplication.shared.root.RootComponent
 import com.example.myapplication.shared.root.RootComponent.Child
+import com.example.myapplication.tasklist.TaskListContent
 import com.example.myapplication.welcome.WelcomeContent
 
 @Composable
@@ -30,6 +31,7 @@ fun RootContent(
                 when (val instance = it.instance) {
                     is Child.Main -> MainContent(component = instance.component)
                     is Child.Welcome -> WelcomeContent(component = instance.component)
+                    is Child.TaskList -> TaskListContent(component = instance.component)
                 }
             }
         }

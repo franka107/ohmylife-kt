@@ -1,15 +1,18 @@
-CREATE TABLE IF NOT EXISTS task (
+CREATE TABLE task (
     id TEXT PRIMARY KEY NOT NULL,
     title TEXT NOT NULL,
     description TEXT,
     started_at TIMESTAMPTZ,
-    paused_at TIMESTAMPTZ,
-    worked_time INTEGER NOT NULL DEFAULT 0,
+    elapsed_time_in_millis BIGINT NOT NULL,
     finished_at TIMESTAMPTZ,
-    priority TEXT NOT NULL CHECK (priority IN ('LOW', 'MEDIUM', 'HIGH')),
-    theme TEXT NOT NULL CHECK (theme IN ('HEALTH', 'WORK', 'STUDY', 'FINANCE', 'RELATIONSHIPS', 'LEISURE')),
-    price INTEGER NOT NULL,
-    experience INTEGER NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    paused_at TIMESTAMPTZ,
+    priority TEXT NOT NULL CHECK (priority IN ('CRITICAL', 'HIGH', 'MEDIUM', 'LOW', 'OPTIONAL')),
+    category_type TEXT CHECK (category_type IN ('KNOWLEDGE', 'WORK', 'CREATIVITY', 'PHYSICAL', 'SOCIAL', 'DISCIPLINE', 'FINANCE', 'LEISURE')),
+    category_reason TEXT,
+    reward_money INTEGER,
+    experience_points INTEGER,
+    difficulty_points INTEGER,
+    difficulty_reason TEXT,
+    created_at TIMESTAMPTZ NOT NULL,
+    updated_at TIMESTAMPTZ NOT NULL
 );

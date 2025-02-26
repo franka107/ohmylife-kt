@@ -8,6 +8,7 @@ import dev.pango.ohmylife.features.sharedkernel.domain.entity.TaskDomain
 import dev.pango.ohmylife.features.sharedkernel.domain.failure.AppFailure
 import dev.pango.ohmylife.features.sharedkernel.domain.repository.TaskRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.io.discardingSink
 
 class TaskRepositorySqldelight(
     private val database: AppDataDatabase,
@@ -22,8 +23,30 @@ class TaskRepositorySqldelight(
         }
     }.mapLeft {AppFailure.DatabaseFailure(it) }
 
+    override fun getTask(id: String): Either<AppFailure, TaskDomain> = Either.catch {
+        database.appDataQueries.getTask(id).executeAsOne().toTaskDomain()
+    }.mapLeft { AppFailure.DatabaseFailure(it) }
 
-    override suspend fun createTask(task: TaskDomain): Either<AppFailure, String> =   Either.catch {
+//    override fun updateTask(task: TaskDomain): Either<AppFailure, Unit> = Either.catch {
+//        val databaseTask = task.toTask()
+//        database.appDataQueries.updateTask(
+//            id = databaseTask.id,
+//            title = databaseTask.title,
+//            description = databaseTask.description,
+//            started_at = databaseTask.started_at,
+//            paused_at = databaseTask.paused_at,
+//            worked_time = databaseTask.worked_time,
+//            finished_at = databaseTask.finished_at,
+//            priority = databaseTask.priority,
+//            theme = databaseTask.theme,
+//            price = databaseTask.price,
+//            experience = databaseTask.experience,
+//            updated_at = databaseTask.updated_at
+//        )
+//    }.mapLeft { AppFailure.DatabaseFailure(it) }
+
+
+    override fun createTask(task: TaskDomain): Either<AppFailure, String> =   Either.catch {
         val databaseTask = task.toTask()
         database.appDataQueries.insertTask(
             id = databaseTask.id,
@@ -31,19 +54,24 @@ class TaskRepositorySqldelight(
             description = databaseTask.description,
             started_at = databaseTask.started_at,
             paused_at = databaseTask.paused_at,
-            worked_time = databaseTask.worked_time,
             finished_at = databaseTask.finished_at,
             priority = databaseTask.priority,
-            theme = databaseTask.theme,
-            price = databaseTask.price,
-            experience = databaseTask.experience,
             created_at = databaseTask.created_at,
-            updated_at = databaseTask.updated_at
+            elapsed_time_in_millis = databaseTask.elapsed_time_in_millis,
+            category_type = databaseTask.category_type,
+            category_reason = databaseTask.category_reason,
+            reward_money = databaseTask.reward_money,
+            experience_points = databaseTask.experience_points,
+            difficulty_points = databaseTask.difficulty_points,
+            difficulty_reason = databaseTask.difficulty_reason,
+            updated_at = databaseTask.updated_at,
         )
-        ""
+        databaseTask.id
     }.mapLeft { AppFailure.DatabaseFailure(it) }
 
-    override suspend fun updateTask(task: TaskDomain): Either<AppFailure, Nothing> {
+    override fun updateTask(task: TaskDomain): Either<AppFailure, Unit> {
         TODO("Not yet implemented")
     }
+
+
 }

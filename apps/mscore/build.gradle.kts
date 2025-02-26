@@ -56,6 +56,8 @@ dependencies {
 
     // https://github.com/brettwooldridge/HikariCP#artifacts
     implementation("com.zaxxer:HikariCP:5.0.1")
+    implementation("com.rabbitmq:amqp-client:5.16.0") // Última versión estable
+
 
     // This is needed for the PostgreSQL driver
     // https://mvnrepository.com/artifact/org.postgresql/postgresql

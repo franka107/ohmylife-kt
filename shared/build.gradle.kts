@@ -17,6 +17,10 @@ kotlin {
                 jvmTarget = libs.versions.jvmTarget.get()
             }
         }
+        dependencies {
+            api(libs.ktor.client.okhttp)
+
+        }
     }
 
     listOf(
@@ -40,11 +44,15 @@ kotlin {
             dependencies {
                 api(libs.decompose.decompose)
                 api(libs.essenty.lifecycle)
+                api(libs.essenty.lifecycleCoroutines)
+                api(libs.ktor.client.core)
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.arrow.core)
                 implementation(libs.arrow.fxcoroutines)
             }
         }
+
+
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))

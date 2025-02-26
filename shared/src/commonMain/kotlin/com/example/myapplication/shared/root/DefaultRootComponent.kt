@@ -1,5 +1,6 @@
 package com.example.myapplication.shared.root
 
+import com.example.myapplication.shared.tasklist.TaskListComponent
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
@@ -11,8 +12,11 @@ import com.arkivanov.decompose.value.Value
 import com.example.myapplication.shared.main.DefaultMainComponent
 import com.example.myapplication.shared.main.MainComponent
 import com.example.myapplication.shared.root.RootComponent.Child
+import com.example.myapplication.shared.tasklist.DefaultTaskListComponent
 import com.example.myapplication.shared.welcome.DefaultWelcomeComponent
 import com.example.myapplication.shared.welcome.WelcomeComponent
+import dev.pango.ohmylife.features.sharedkernel.application.service.TemporalTaskRepository
+import io.ktor.client.HttpClient
 import kotlinx.serialization.Serializable
 
 class DefaultRootComponent(
@@ -25,7 +29,7 @@ class DefaultRootComponent(
         childStack(
             source = navigation,
             serializer = Config.serializer(),
-            initialConfiguration = Config.Main,
+            initialConfiguration = Config.TaskList,
             handleBackButton = true,
             childFactory = ::child,
         )
@@ -34,6 +38,7 @@ class DefaultRootComponent(
         when (config) {
             is Config.Main -> Child.Main(mainComponent(childComponentContext))
             is Config.Welcome -> Child.Welcome(welcomeComponent(childComponentContext))
+            is Config.TaskList -> Child.TaskList(taskListComponent(childComponentContext))
         }
 
     private fun mainComponent(componentContext: ComponentContext): MainComponent =
@@ -48,6 +53,13 @@ class DefaultRootComponent(
             onFinished = navigation::pop,
         )
 
+    private fun taskListComponent(componentContext: ComponentContext): TaskListComponent =
+        DefaultTaskListComponent(
+            componentContext = componentContext,
+            onFinished = navigation::pop,
+            temporalTaskRepository = TemporalTaskRepository(HttpClient()),
+        )
+
     override fun onBackClicked(toIndex: Int) {
         navigation.popTo(index = toIndex)
     }
@@ -59,5 +71,8 @@ class DefaultRootComponent(
 
         @Serializable
         data object Welcome : Config
+
+        @Serializable
+        data object TaskList : Config
     }
 }

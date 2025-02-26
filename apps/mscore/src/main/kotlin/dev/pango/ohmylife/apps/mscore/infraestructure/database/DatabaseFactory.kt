@@ -13,11 +13,11 @@ object DatabaseFactory {
 
         val database = AppDataDatabase(driver)
 
-        AppDataDatabase.Schema.migrate(
-            driver = driver,
-            oldVersion = 0,
-            newVersion = AppDataDatabase.Schema.version,
-        )
+//        AppDataDatabase.Schema.migrate(
+//            driver = driver,
+//            oldVersion = 0,
+//            newVersion = AppDataDatabase.Schema.version,
+//        )
 
         return database
     }

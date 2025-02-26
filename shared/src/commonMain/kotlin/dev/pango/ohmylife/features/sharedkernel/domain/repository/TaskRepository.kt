@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface TaskRepository {
     fun getTaskListFlow(): Flow<List<TaskDomain>>
     fun getTaskList(): Either<AppFailure, List<TaskDomain>>
-    suspend fun createTask(task: TaskDomain): Either<AppFailure, String>
-    suspend fun updateTask(task: TaskDomain): Either<AppFailure, Nothing>
+    fun getTask(id: String): Either<AppFailure, TaskDomain>
+    fun createTask(task: TaskDomain): Either<AppFailure, String>
+    fun updateTask(task: TaskDomain): Either<AppFailure, Unit>
 }
