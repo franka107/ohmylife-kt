@@ -35,7 +35,6 @@ fun Application.taskRoutes() {
 
         post("/tasks/{id}/play") {
             val id = call.parameters["id"] ?: return@post call.respond(mapOf("error" to "Missing task ID"))
-            val request = call.receive<TaskDto>()
             val result = taskService.playTask(id)
             result.fold(
                 ifLeft = { call.respond(mapOf("error" to it.message, "cause" to it.cause?.message)) },
@@ -45,7 +44,6 @@ fun Application.taskRoutes() {
 
         post("/tasks/{id}/pause") {
             val id = call.parameters["id"] ?: return@post call.respond(mapOf("error" to "Missing task ID"))
-            val request = call.receive<TaskDto>()
             val result = taskService.pauseTask(id)
             result.fold(
                 ifLeft = { call.respond(mapOf("error" to it.message, "cause" to it.cause?.message)) },
@@ -55,7 +53,6 @@ fun Application.taskRoutes() {
 
         post("/tasks/{id}/stop") {
             val id = call.parameters["id"] ?: return@post call.respond(mapOf("error" to "Missing task ID"))
-            val request = call.receive<TaskDto>()
             val result = taskService.stopTask(id)
             result.fold(
                 ifLeft = { call.respond(mapOf("error" to it.message, "cause" to it.cause?.message)) },

@@ -50,6 +50,7 @@ kotlin {
                 api(libs.ktor.serializationkotlinxjson)
                 api(libs.kotlinx.datetime)
                 implementation(libs.arrow.core)
+                implementation("com.benasher44:uuid:0.8.4")
                 implementation(libs.arrow.fxcoroutines)
             }
         }

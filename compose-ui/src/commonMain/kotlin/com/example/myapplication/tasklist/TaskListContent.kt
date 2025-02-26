@@ -32,6 +32,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -50,6 +51,8 @@ internal fun TaskListContent(
     modifier: Modifier = Modifier,
 ) {
     val model by component.model.subscribeAsState()
+    var showBottomSheet by remember { mutableStateOf(false) }
+
 
     Scaffold(
         modifier = modifier,
@@ -70,6 +73,21 @@ internal fun TaskListContent(
 
             paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
+
+            if (showBottomSheet) {
+                CreateTaskBottomSheet(
+                    onDismiss = { showBottomSheet = false },
+                    onCreateTask = { title, description, priority ->
+                        println("Tarea creada: $title, $description, Prioridad: $priority")
+                        component.onCreateTaskButtonClicked(taskTitle = title, taskDescription = description, taskPriority  =priority)
+                        // Aquí puedes hacer la llamada al backend para crear la tarea
+                    }
+                )
+            }
+
+            Button(onClick = { showBottomSheet = true }) {
+                Text("Nueva Tarea")
+            }
             IconButton(onClick = {component.onRefreshButtonClicked()}) {
                 Icon(imageVector = Icons.Default.Refresh, contentDescription = "Refresh")
             }

@@ -44,9 +44,7 @@ class TemporalTaskRepository(private val client: HttpClient) {
     }
 
 
-    suspend fun createTask() {
-        val response: HttpResponse = client.post("https://core.ohmylife.development.pango.dev/tasks")
-    }
+
 
     suspend fun playTask(taskId: String) {
         val response: HttpResponse = client.post("https://core.ohmylife.development.pango.dev/tasks/${taskId}/play")

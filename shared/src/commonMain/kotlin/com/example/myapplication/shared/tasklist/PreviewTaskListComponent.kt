@@ -1,6 +1,7 @@
 package com.example.myapplication.shared.tasklist
 
 import com.arkivanov.decompose.value.MutableValue
+import dev.pango.ohmylife.features.sharedkernel.domain.entity.TaskPriority
 
 
 object PreviewTaskListComponent : TaskListComponent {
@@ -20,5 +21,12 @@ object PreviewTaskListComponent : TaskListComponent {
 
     override fun onRefreshButtonClicked() {
 
+    }
+
+    override fun onCreateTaskButtonClicked(
+        taskTitle: String,
+        taskDescription: String?,
+        taskPriority: TaskPriority
+    ) {
     }
 }

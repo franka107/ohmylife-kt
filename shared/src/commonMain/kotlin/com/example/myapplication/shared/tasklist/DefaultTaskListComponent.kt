@@ -7,10 +7,12 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.update
 import dev.pango.ohmylife.features.sharedkernel.application.service.TemporalTaskRepository
 import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
+import com.benasher44.uuid.uuid4
 import dev.pango.ohmylife.features.sharedkernel.domain.entity.TaskCategoryType
 import dev.pango.ohmylife.features.sharedkernel.domain.entity.TaskDomain
 import dev.pango.ohmylife.features.sharedkernel.domain.entity.TaskPriority
 import dev.pango.ohmylife.features.sharedkernel.mapper.toDomain
+import dev.pango.ohmylife.features.sharedkernel.mapper.toDto
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -78,6 +80,35 @@ class DefaultTaskListComponent(
         scope.launch {
             loadTasks()
         }
+    }
+
+    override fun onCreateTaskButtonClicked(
+        taskTitle: String,
+        taskDescription: String?,
+        taskPriority: TaskPriority
+    ) {
+        scope.launch {
+            val taskDomain = TaskDomain(
+                id = uuid4().toString(),
+                title = taskTitle,
+                description = taskDescription,
+                startedAt = null,
+                elapsedTimeInMillis = 0,
+                finishedAt = null,
+                pausedAt = null,
+                priority = taskPriority,
+                categoryType = null,
+                categoryReason = null,
+                rewardMoney = null,
+                experiencePoints = null,
+                difficultyPoints = null,
+                difficultyReason = null,
+                createdAt = Clock.System.now(),
+                updatedAt = Clock.System.now()
+            )
+            temporalTaskRepository.createTask(taskDomain.toDto())
+        }
+
     }
 
     override fun onPlayTaskButtonClicked(taskId: String) {
